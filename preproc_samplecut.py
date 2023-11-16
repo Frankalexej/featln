@@ -143,7 +143,7 @@ def collaboration_single_work(my_work_pool, fun, my_wave_dir, my_anno_dir, my_sa
             resampled_wave = torch.tensor(signal.resample(cut_seg, 4240, axis=1)).to(device)
             mfcc_feats = torch.cat((mfcc_feats, transform(resampled_wave).unsqueeze(0)), dim=0)
 
-        torch.save(mfcc_feats, save_name)        
+        torch.save(mfcc_feats, save_name)
         csv_path = os.path.join(my_log_dir, "f{rec_name}.csv")
         corr_df.to_csv(csv_path, index=False)
     print("Work from {} to {} ends".format(my_work_pool[0], my_work_pool[-1]))
