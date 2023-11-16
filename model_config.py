@@ -7,7 +7,7 @@ MFCC_DIM = 13
 INPUT_DIM = FRAMES_IN_SEGMENT * MFCC_DIM * 3
 OUTPUT_DIM = FRAMES_IN_SEGMENT * MFCC_DIM
 # let's still maintain these interdims but just ignore them when building the model 
-INTER_DIM_1 = 256
+INTER_DIM_1 = 64
 INTER_DIM_2 = 64
 INTER_DIM_3 = 16
 LATENT_DIM = 3
