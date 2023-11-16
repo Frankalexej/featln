@@ -67,4 +67,4 @@ class GroundedSoundDataset(Dataset):
         inp = self.dataset[idx]
         outp = inp[:, :13]
         token = self.token_list[idx]
-        return inp, outp
+        return inp, outp, token
