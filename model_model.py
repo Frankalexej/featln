@@ -6,31 +6,31 @@ class ResBlock(nn.Module):
         super(ResBlock, self).__init__()
         self.lin1 = nn.Linear(n_chans, n_chans)
         self.lin2 = nn.Linear(n_chans, n_chans)
-        # self.batch_norm = nn.BatchNorm1d(num_features=n_chans)  # <5>
-        self.relu = nn.Tanh()
+        self.batch_norm = nn.BatchNorm1d(num_features=n_chans)  # <5>
+        self.relu = nn.ReLU()
 
     def forward(self, x):
         out = self.lin1(x)
-        # out = self.batch_norm(out)
+        out = self.batch_norm(out)
         out = self.relu(out)
         out = self.lin2(out)
-        # out = self.batch_norm(out)
-        out = out + x
+        out = self.batch_norm(out)
         out = self.relu(out)
+        out = out + x
         return out
 
 class LinPack(nn.Module):
     def __init__(self, n_in, n_out):
         super(LinPack, self).__init__()
         self.lin = nn.Linear(n_in, n_out)
-        self.relu = nn.Tanh()
-        # self.batch_norm = nn.BatchNorm1d(num_features=n_out)
+        self.relu = nn.ReLU()
+        self.batch_norm = nn.BatchNorm1d(num_features=n_out)
         # self.dropout = nn.Dropout(p=DROPOUT)
 
     def forward(self, x):
         x = self.lin(x)
         x = self.relu(x)
-        # x = self.batch_norm(x)
+        x = self.batch_norm(x)
         # x = self.dropout(x)
         return x
 
@@ -42,15 +42,15 @@ class ResAE(nn.Module):
         self.encoder = nn.Sequential(
             LinPack(input_dim, inter_dim1), 
             ResBlock(inter_dim1), 
-            # ResBlock(inter_dim1), 
+            ResBlock(inter_dim1), 
             nn.Linear(inter_dim1, latent_dim), 
-            nn.Sigmoid()
+            # nn.Sigmoid()
         )
 
         self.decoder =  nn.Sequential(
             LinPack(latent_dim, inter_dim1), 
             ResBlock(inter_dim1), 
-            # ResBlock(inter_dim1), 
+            ResBlock(inter_dim1), 
             nn.Linear(inter_dim1, output_dim),
             # nn.Sigmoid(),
         )
