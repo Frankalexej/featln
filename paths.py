@@ -24,6 +24,9 @@ phone_seg_anno_log_path = bsc_path + "phone_seg_anno_log/"
 phone_seg_random_rec_path = "/home/ldlmdl/Documents/wavln/src/bsc/phone_seg_random/"
 phone_seg_anno_rec_path = "/home/ldlmdl/Documents/wavln/src/bsc/phone_seg_anno/"
 
+phone_seg_random_MF_path = bsc_path + "phone_seg_random_MF/"
+phone_seg_anno_MF_path = bsc_path + "phone_seg_anno_MF/"
+
 bsc_use_path = bsc_path + "use/"
 
 model_save_dir = root_path + "model_save/"
