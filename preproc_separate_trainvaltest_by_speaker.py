@@ -23,8 +23,8 @@ def separate_TVT(guide_file):
 
 
 if __name__ == "__main__": 
-    prefix = "phone_random_"
-    tr, va, te = separate_TVT(os.path.join(phone_seg_random_log_path, "log.csv"))
+    prefix = "phone_anno_"
+    tr, va, te = separate_TVT(os.path.join(bsc_path, "anno-log.csv"))
     tr.to_csv(os.path.join(bsc_use_path, prefix + "train.csv"), index=False)
     va.to_csv(os.path.join(bsc_use_path, prefix + "validation.csv"), index=False)
     te.to_csv(os.path.join(bsc_use_path, prefix + "test.csv"), index=False)

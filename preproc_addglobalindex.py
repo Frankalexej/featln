@@ -14,5 +14,10 @@ def add_global_index(path):
     df.to_csv(path, index=False)
 
 if __name__ == "__main__":
-    add_global_index(os.path.join(phone_seg_anno_log_path, "log.csv"))
-    add_global_index(os.path.join(phone_seg_random_log_path, "log.csv"))
+    for logname in ['phone_anno_train.csv', 
+                    'phone_random_train.csv', 
+                    'phone_random_test.csv', 
+                    'phone_anno_test.csv', 
+                    'phone_anno_validation.csv', 
+                    'phone_random_validation.csv']: 
+        add_global_index(os.path.join(bsc_use_path, logname))

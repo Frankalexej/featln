@@ -16,8 +16,8 @@ class MFCCTransform(nn.Module):
         feature = torch.cat([feature, d1, d2], dim=-1)
 
         # Apply normalization (CMVN)
-        eps = 1e-9
-        mean = feature.mean(0, keepdim=True)
-        std = feature.std(0, keepdim=True, unbiased=False)
-        feature = (feature - mean) / (std + eps)
+        # eps = 1e-9
+        # mean = feature.mean(0, keepdim=True)
+        # std = feature.std(0, keepdim=True, unbiased=False)
+        # feature = (feature - mean) / (std + eps)
         return feature

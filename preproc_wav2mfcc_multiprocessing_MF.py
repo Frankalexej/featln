@@ -48,6 +48,9 @@ def divide_work(worklist, n):
 
 
 if __name__ == '__main__':
+    # src_ = phone_seg_random_rec_path
+    # tgt_ = phone_seg_random_MF_path
+    # log_ = os.path.join(bsc_path, "random-log.csv")
     src_ = phone_seg_anno_rec_path
     tgt_ = phone_seg_anno_MF_path
     log_ = os.path.join(bsc_path, "anno-log.csv")
