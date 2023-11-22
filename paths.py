@@ -26,6 +26,8 @@ phone_seg_anno_rec_path = "/home/ldlmdl/Documents/wavln/src/bsc/phone_seg_anno/"
 
 phone_seg_random_MF_path = bsc_path + "phone_seg_random_MF/"
 phone_seg_anno_MF_path = bsc_path + "phone_seg_anno_MF/"
+phone_seg_random_RF_path = bsc_path + "phone_seg_random_RF/"
+phone_seg_anno_RF_path = bsc_path + "phone_seg_anno_RF/"
 
 bsc_use_path = bsc_path + "use/"
 

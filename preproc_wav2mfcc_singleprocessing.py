@@ -8,18 +8,20 @@ import multiprocessing
 import pandas as pd
 
 from paths import *
-from preproc_mfccTransform import MFCCTransform
+from model_dataset import MFCCTransform, Normalizer, Resampler
 from misc_progress_bar import draw_progress_bar
 
 
-transformer = MFCCTransform()
+transformer = MFCCTransform(normalizer=Normalizer.norm_strip_mvn)
+resampler = Resampler(target_frame_num=4240, axis=1)
 
 def process_files(src_dir, tgt_dir, files, save_name):
     mfcc_feats = torch.empty(0, 25, 39)
     for file in files:
         try: 
             wave, sr = torchaudio.load(os.path.join(src_dir, file))
-            resampled_wave = torch.tensor(signal.resample(wave, 4240, axis=1))
+            # resampled_wave = torch.tensor(signal.resample(wave, 4240, axis=1))
+            resampled_wave = resampler(wave)
             mfcc_feats = torch.cat([mfcc_feats, transformer(resampled_wave).unsqueeze(0)], dim=0)
         except Exception as e: 
             print(e)
