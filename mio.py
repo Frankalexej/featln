@@ -49,6 +49,20 @@ def filter_tokens_and_get_df(csv_path, keepSIL=False):
     
     return filtered_df
 
+def filter_tokens_and_get_df_man(csv_path, keepSIL=False):
+    df = pd.read_csv(csv_path)
+    
+    # Filter out tokens surrounded by <> and/or totally capitalized (but SIL might be special)
+    if keepSIL: 
+        filtered_df = df
+    else: 
+        filtered_df = df[df['token'] != '[SIL]']
+
+    # Filter out rows where duration is equal to 0
+    filtered_df = filtered_df[filtered_df['duration'] >= 0.0125]
+    
+    return filtered_df
+
 # We filter out tokens surrounded by <> and all-capital tokens, as they are not word tokens.
 # We also filter out tokens with duration equal to 0, as they are invalid.
 def filter_tokens_and_get_durations(csv_path):

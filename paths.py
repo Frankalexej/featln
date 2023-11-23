@@ -34,6 +34,7 @@ bsc_use_path = bsc_path + "use/"
 model_save_dir = root_path + "model_save/"
 model_eng_save_dir = model_save_dir + "eng/"
 model_man_save_dir = model_save_dir + "man/"
+
 # NOTE: don't put file paths here, only directory. 
 
 def mk(dir): 

@@ -2,6 +2,7 @@ import pandas as pd
 import torch
 import os
 from paths import *
+from ssd_paths import *
 
 def intergate_mfcc(guide_file, src_): 
     guide_df = pd.read_csv(guide_file)
@@ -21,11 +22,14 @@ def intergate_mfcc(guide_file, src_):
                     'phone_random_validation.csv']
 """
 if __name__ == "__main__":
-    for logname in ['phone_anno_test.csv', 
-                    'phone_anno_validation.csv']: 
-        src_ = phone_seg_random_MF_path if "random" in logname else phone_seg_anno_MF_path
-        mfcc_tensor = intergate_mfcc(os.path.join(bsc_use_path, logname), src_)
+    for logname in ['phone_random_train.csv', 
+                    'phone_random_test.csv', 
+                    'phone_anno_test.csv', 
+                    'phone_anno_validation.csv', 
+                    'phone_random_validation.csv']: 
+        src_ = as_phone_seg_random_MF_path if "random" in logname else as_phone_seg_anno_MF_path
+        mfcc_tensor = intergate_mfcc(os.path.join(as_use_path, logname), src_)
         mfcc_filename = logname.split(".")[0]
-        torch.save(mfcc_tensor, os.path.join(bsc_use_path, f"{mfcc_filename}.mfcc"))
+        torch.save(mfcc_tensor, os.path.join(as_use_path, f"{mfcc_filename}.mfcc"))
     # mfcc_tensor = intergate_mfcc(os.path.join(phone_seg_anno_log_path, "log.csv"), phone_seg_anno_path)
     # torch.save(mfcc_tensor, os.path.join(bsc_path, "phone_anno.mfcc"))
