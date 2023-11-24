@@ -22,8 +22,7 @@ def intergate_mfcc(guide_file, src_):
                     'phone_random_validation.csv']
 """
 if __name__ == "__main__":
-    for logname in ['phone_random_train.csv', 
-                    'phone_random_test.csv', 
+    for logname in ['phone_random_test.csv', 
                     'phone_anno_test.csv', 
                     'phone_anno_validation.csv', 
                     'phone_random_validation.csv']: 

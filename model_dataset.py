@@ -27,11 +27,11 @@ class UngroundedSoundDataset(Dataset):
         self.dataset = torch.load(data_path)
         # Load the guide
         control_file = pd.read_csv(guide_path)
-        print(len(control_file), len(self.dataset))
-        assert len(control_file) == len(self.dataset)
         # Filter out the ones with too few frames or those that are too long
         control_file = control_file[control_file['n_frames'] > 400]
         control_file = control_file[control_file['duration'] <= 2.0]
+        assert len(control_file) == len(self.dataset)
+        print(len(control_file), len(self.dataset))
 
         self.index_list = control_file['global_idx'].tolist()
     

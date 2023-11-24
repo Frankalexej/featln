@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 from paths import *
+from ssd_paths import *
 
 def add_global_index(path):
     # read in the csv file
@@ -12,12 +13,10 @@ def add_global_index(path):
 
     # write the updated dataframe back to the csv file
     df.to_csv(path, index=False)
-
+# 'phone_anno_train.csv','phone_random_train.csv', 
+                    # 'phone_random_test.csv', 
 if __name__ == "__main__":
-    for logname in ['phone_anno_train.csv', 
-                    'phone_random_train.csv', 
-                    'phone_random_test.csv', 
+    for logname in [ 
                     'phone_anno_test.csv', 
-                    'phone_anno_validation.csv', 
-                    'phone_random_validation.csv']: 
-        add_global_index(os.path.join(bsc_use_path, logname))
+                    'phone_anno_validation.csv']: 
+        add_global_index(os.path.join(sbsc_use_path, logname))
