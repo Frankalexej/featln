@@ -95,10 +95,37 @@ if __name__ == '__main__':
     #         pool.close()
     #         pool.join()
 
+    # for logname in ANNO_LOGS: 
+    #     print(logname)
+    #     src_ = as_phone_seg_anno_path
+    #     tgt_ = as_phone_seg_anno_MF_path
+    #     log_ = os.path.join(as_use_path, logname)
+
+    #     guide_log = pd.read_csv(log_)
+    #     guide_log = guide_log[guide_log['n_frames'] > 400]
+    #     guide_log = guide_log[guide_log['duration'] <= 2.0]
+
+    #     guide_log.to_csv(log_, index=False)
+    #     guide_log = pd.read_csv(log_)
+
+    #     workmap = generate_dict(guide_log)
+    #     worklist = sorted(workmap.keys())
+    #     divided_worklist = divide_work(worklist, multiprocessing.cpu_count())
+    #     for workchunk in divided_worklist: 
+    #         pool = multiprocessing.Pool(processes=32)
+
+    #         for i, rec in enumerate(workchunk):
+    #             print(f"Start {rec}")
+    #             files = workmap[rec]
+    #             filelist = [f"{rec}_{str(idx).zfill(8)}.wav" for idx in files]
+    #             result = pool.apply_async(process_files_mf, args=(src_, tgt_, filelist, rec))
+    #         pool.close()
+    #         pool.join()
+
     for logname in ANNO_LOGS: 
         print(logname)
-        src_ = as_phone_seg_anno_path
-        tgt_ = as_phone_seg_anno_MF_path
+        src_ = as_phone_seg_anno_new_path
+        tgt_ = as_phone_seg_anno_new_MF_path
         log_ = os.path.join(as_use_path, logname)
 
         guide_log = pd.read_csv(log_)

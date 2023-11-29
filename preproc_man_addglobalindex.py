@@ -13,11 +13,14 @@ def add_global_index(path):
 
     # write the updated dataframe back to the csv file
     df.to_csv(path, index=False)
-
+"""
+'phone_random_train.csv', 
+'phone_random_test.csv', 
+'phone_random_validation.csv'
+"""
 if __name__ == "__main__":
-    for logname in ['phone_random_train.csv', 
-                    'phone_random_test.csv', 
+    for logname in [
                     'phone_anno_test.csv', 
                     'phone_anno_validation.csv', 
-                    'phone_random_validation.csv']: 
+                    ]: 
         add_global_index(os.path.join(as_use_path, logname))

@@ -9,12 +9,15 @@ as_wav_path = ssd_aishell_path + "wav/"
 as_phones_extract_path = ssd_aishell_path + "phones_extract/"
 
 as_phone_seg_anno_path = ssd_aishell_path + "phone_seg_anno/"
+as_phone_seg_anno_new_path = ssd_aishell_path + "phone_seg_anno_new/"
 as_phone_seg_random_path = ssd_aishell_path + "phone_seg_random/"
 
 as_phone_seg_anno_log_path = ssd_aishell_path + "phone_seg_anno_log/"
+as_phone_seg_anno_new_log_path = ssd_aishell_path + "phone_seg_anno_new_log/"
 as_phone_seg_random_log_path = ssd_aishell_path + "phone_seg_random_log/"
 
 as_phone_seg_anno_MF_path = ssd_aishell_path + "phone_seg_anno_MF/"
+as_phone_seg_anno_new_MF_path = ssd_aishell_path + "phone_seg_anno_new_MF/"
 as_phone_seg_random_MF_path = ssd_aishell_path + "phone_seg_random_MF/"
 
 as_use_path = ssd_aishell_path + "use/"

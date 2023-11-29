@@ -22,11 +22,10 @@ def intergate_mfcc(guide_file, src_):
                     'phone_random_validation.csv']
 """
 if __name__ == "__main__":
-    for logname in ['phone_random_test.csv', 
-                    'phone_anno_test.csv', 
-                    'phone_anno_validation.csv', 
-                    'phone_random_validation.csv']: 
-        src_ = as_phone_seg_random_MF_path if "random" in logname else as_phone_seg_anno_MF_path
+    for logname in ['phone_anno_test.csv', 
+                    'phone_anno_validation.csv', ]: 
+        # src_ = as_phone_seg_random_MF_path if "random" in logname else as_phone_seg_anno_MF_path
+        src_ = as_phone_seg_anno_new_MF_path
         mfcc_tensor = intergate_mfcc(os.path.join(as_use_path, logname), src_)
         mfcc_filename = logname.split(".")[0]
         torch.save(mfcc_tensor, os.path.join(as_use_path, f"{mfcc_filename}.mfcc"))
