@@ -19,11 +19,16 @@ as_phone_seg_random_log_path = ssd_aishell_path + "phone_seg_random_log/"
 as_phone_seg_anno_MF_path = ssd_aishell_path + "phone_seg_anno_MF/"
 as_phone_seg_anno_new_MF_path = ssd_aishell_path + "phone_seg_anno_new_MF/"
 as_phone_seg_random_MF_path = ssd_aishell_path + "phone_seg_random_MF/"
+as_phone_seg_anno_OMF_path = ssd_aishell_path + "phone_seg_anno_OMF/"   # original MFCC first
+as_phone_seg_random_OMF_path = ssd_aishell_path + "phone_seg_random_OMF/"   # original MFCC first
 
 as_use_path = ssd_aishell_path + "use/"
 
 sbsc_path = ssd_src_path + "bsc/"
 sbsc_use_path = sbsc_path + "use/"
+
+sbsc_phone_seg_anno_OMF_path = sbsc_path + "phone_seg_anno_OMF/"
+sbsc_phone_seg_random_OMF_path = sbsc_path + "phone_seg_random_OMF/"
 
 def mk(dir): 
     os.makedirs(dir, exist_ok = True)

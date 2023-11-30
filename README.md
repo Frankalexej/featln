@@ -32,4 +32,4 @@ Now everything is ready to use under bsc/use/
 7. :preproc_man_token_detonolize.ipynb [delete tone numbers in pinyin]
 8. :python preproc_man_addglobalindex.py
 9. :python preproc_man_wav2mfcc_multiprocessing_MF.py
-10. :preproc_man_integrate_mfccs.py
+10. :python preproc_man_integrate_mfccs.py / :python preproc_man_integrate_mfccs_stepbystep.py [this is much faster for large size integration]

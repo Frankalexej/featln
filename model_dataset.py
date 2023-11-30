@@ -23,7 +23,7 @@ class UngroundedSoundDataset(Dataset):
         dataset (torch.Tensor): The loaded dataset.
         index_list (list): The list of indices of the dataset to be used.
     """
-    def __init__(self, data_path, guide_path): 
+    def __init__(self, data_path, guide_path, transform=None): 
         # Load the dataset
         self.dataset = torch.load(data_path)
         # Load the guide
@@ -35,12 +35,15 @@ class UngroundedSoundDataset(Dataset):
         print(len(control_file), len(self.dataset))
 
         self.index_list = control_file['global_idx'].tolist()
+        self.transform = transform
     
     def __len__(self) :
         return len(self.index_list)
     
     def __getitem__(self, idx): 
         inp = self.dataset[idx]
+        if self.transform:
+            inp = self.transform(inp)
         outp = inp[:, :13]
         return inp, outp
     
@@ -57,7 +60,7 @@ class GroundedSoundDataset(Dataset):
         dataset (torch.Tensor): The loaded dataset.
         index_list (list): The list of indices of the dataset to be used.
     """
-    def __init__(self, data_path, guide_path): 
+    def __init__(self, data_path, guide_path, transform=None): 
         # Load the dataset
         self.dataset = torch.load(data_path)
         # Load the guide
@@ -68,12 +71,15 @@ class GroundedSoundDataset(Dataset):
 
         self.index_list = control_file['global_idx'].tolist()
         self.token_list = control_file['token'].tolist()
+        self.transform = transform
     
     def __len__(self) :
         return len(self.index_list)
     
     def __getitem__(self, idx): 
         inp = self.dataset[idx]
+        if self.transform:
+            inp = self.transform(inp)
         outp = inp[:, :13]
         token = self.token_list[idx]
         return inp, outp, token
@@ -164,9 +170,8 @@ class FlyingGroundedSoundDataset(Dataset):
         return data, data[:, :13], self.tokenset[idx]
 
 class MFCCTransform(nn.Module): 
-    def __init__(self, sample_rate=16000, n_mfcc=13, normalizer=None): 
+    def __init__(self, sample_rate=16000, n_mfcc=13): 
         super().__init__()
-        self.normalizer = normalizer
         self.sample_rate = sample_rate
     
     def forward(self, waveform): 
@@ -181,10 +186,6 @@ class MFCCTransform(nn.Module):
         d1 = torchaudio.functional.compute_deltas(feature)
         d2 = torchaudio.functional.compute_deltas(d1)
         feature = torch.cat([feature, d1, d2], dim=-1)
-
-        # normalize
-        if self.normalizer: 
-            feature = self.normalizer(feature)
 
         return feature
 
@@ -230,12 +231,27 @@ class Resampler(nn.Module):
         return torch.tensor(signal.resample(mfcc, self.target_frame_num, axis=self.axis))
 
 
-class Normalizer: 
+class Normalizer(nn.Module): 
+    def __init__(self, norm_fun): 
+        super().__init__()
+        self.norm_fun = norm_fun
+    
+    def forward(self, mfcc):
+        return self.norm_fun(mfcc)
+    
     @staticmethod
     def norm_strip_mvn(mel_spec):
         eps = 1e-9
         mean = mel_spec.mean(1, keepdim=True)
         std = mel_spec.std(1, keepdim=True, unbiased=False)
+        norm_spec = (mel_spec - mean) / (std + eps)
+        return norm_spec
+    
+    @staticmethod
+    def norm_mvn(mel_spec):
+        eps = 1e-9
+        mean = mel_spec.mean()
+        std = mel_spec.std()
         norm_spec = (mel_spec - mean) / (std + eps)
         return norm_spec
     

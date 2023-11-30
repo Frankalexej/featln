@@ -14,7 +14,7 @@ from model_dataset import MFCCTransform, Normalizer, Resampler
 from misc_progress_bar import draw_progress_bar
 
 
-transformer = MFCCTransform(normalizer=Normalizer.norm_strip_mvn)
+transformer = MFCCTransform()
 resampler_mf = Resampler(target_frame_num=25, axis=0)
 resampler_rf = Resampler(target_frame_num=4240, axis=1)
 
@@ -68,10 +68,37 @@ def divide_work(worklist, n):
 RANDOM_LOGS = ['phone_random_train.csv', 'phone_random_test.csv', 'phone_random_validation.csv']
 ANNO_LOGS = ['phone_anno_test.csv', 'phone_anno_validation.csv']
 if __name__ == '__main__':
-    # for logname in RANDOM_LOGS: 
+    for logname in RANDOM_LOGS: 
+        print(logname)
+        src_ = as_phone_seg_random_path
+        tgt_ = as_phone_seg_random_OMF_path
+        log_ = os.path.join(as_use_path, logname)
+
+        guide_log = pd.read_csv(log_)
+        guide_log = guide_log[guide_log['n_frames'] > 400]
+        guide_log = guide_log[guide_log['duration'] <= 2.0]
+
+        guide_log.to_csv(log_, index=False)
+        guide_log = pd.read_csv(log_)
+
+        workmap = generate_dict(guide_log)
+        worklist = sorted(workmap.keys())
+        divided_worklist = divide_work(worklist, multiprocessing.cpu_count())
+        for workchunk in divided_worklist: 
+            pool = multiprocessing.Pool(processes=32)
+
+            for i, rec in enumerate(workchunk):
+                print(f"Start {rec}")
+                files = workmap[rec]
+                filelist = [f"{rec}_{str(idx).zfill(8)}.wav" for idx in files]
+                result = pool.apply_async(process_files_mf, args=(src_, tgt_, filelist, rec))
+            pool.close()
+            pool.join()
+
+    # for logname in ANNO_LOGS: 
     #     print(logname)
-    #     src_ = as_phone_seg_random_path
-    #     tgt_ = as_phone_seg_random_MF_path
+    #     src_ = as_phone_seg_anno_path
+    #     tgt_ = as_phone_seg_anno_OMF_path
     #     log_ = os.path.join(as_use_path, logname)
 
     #     guide_log = pd.read_csv(log_)
@@ -97,8 +124,8 @@ if __name__ == '__main__':
 
     # for logname in ANNO_LOGS: 
     #     print(logname)
-    #     src_ = as_phone_seg_anno_path
-    #     tgt_ = as_phone_seg_anno_MF_path
+    #     src_ = as_phone_seg_anno_new_path
+    #     tgt_ = as_phone_seg_anno_OMF_path
     #     log_ = os.path.join(as_use_path, logname)
 
     #     guide_log = pd.read_csv(log_)
@@ -121,33 +148,6 @@ if __name__ == '__main__':
     #             result = pool.apply_async(process_files_mf, args=(src_, tgt_, filelist, rec))
     #         pool.close()
     #         pool.join()
-
-    for logname in ANNO_LOGS: 
-        print(logname)
-        src_ = as_phone_seg_anno_new_path
-        tgt_ = as_phone_seg_anno_new_MF_path
-        log_ = os.path.join(as_use_path, logname)
-
-        guide_log = pd.read_csv(log_)
-        guide_log = guide_log[guide_log['n_frames'] > 400]
-        guide_log = guide_log[guide_log['duration'] <= 2.0]
-
-        guide_log.to_csv(log_, index=False)
-        guide_log = pd.read_csv(log_)
-
-        workmap = generate_dict(guide_log)
-        worklist = sorted(workmap.keys())
-        divided_worklist = divide_work(worklist, multiprocessing.cpu_count())
-        for workchunk in divided_worklist: 
-            pool = multiprocessing.Pool(processes=32)
-
-            for i, rec in enumerate(workchunk):
-                print(f"Start {rec}")
-                files = workmap[rec]
-                filelist = [f"{rec}_{str(idx).zfill(8)}.wav" for idx in files]
-                result = pool.apply_async(process_files_mf, args=(src_, tgt_, filelist, rec))
-            pool.close()
-            pool.join()
 
     # # anno
     # print("anno")

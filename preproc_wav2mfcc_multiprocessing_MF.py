@@ -8,12 +8,13 @@ import multiprocessing
 import pandas as pd
 
 from paths import *
+from ssd_paths import *
 # from preproc_mfccTransform import MFCCTransform
 from model_dataset import MFCCTransform, Normalizer, Resampler
 from misc_progress_bar import draw_progress_bar
 
 
-transformer = MFCCTransform(normalizer=Normalizer.norm_strip_mvn)
+transformer = MFCCTransform()
 resampler_mf = Resampler(target_frame_num=25, axis=0)
 resampler_rf = Resampler(target_frame_num=4240, axis=1)
 
@@ -64,34 +65,64 @@ def divide_work(worklist, n):
     return chunks
 
 
-
+# RANDOM_LOGS = ['phone_random_train.csv', 'phone_random_test.csv', 'phone_random_validation.csv']
+RANDOM_LOGS = ['phone_random_test.csv', 'phone_random_validation.csv']
+ANNO_LOGS = ['phone_anno_test.csv', 'phone_anno_validation.csv']
 if __name__ == '__main__':
-    # random 
-    print("random")
-    src_ = phone_seg_random_rec_path
-    tgt_ = phone_seg_random_MF_path
-    log_ = os.path.join(bsc_path, "random-log.csv")
+    for logname in RANDOM_LOGS: 
+        print(logname)
+        src_ = phone_seg_random_rec_path
+        tgt_ = sbsc_phone_seg_random_OMF_path
+        log_ = os.path.join(sbsc_use_path, logname)
 
-    guide_log = pd.read_csv(log_)
-    guide_log = guide_log[guide_log['n_frames'] > 400]
-    guide_log = guide_log[guide_log['duration'] <= 2.0]
+        guide_log = pd.read_csv(log_)
+        guide_log = guide_log[guide_log['n_frames'] > 400]
+        guide_log = guide_log[guide_log['duration'] <= 2.0]
 
-    guide_log.to_csv(log_, index=False)
-    guide_log = pd.read_csv(log_)
+        guide_log.to_csv(log_, index=False)
+        guide_log = pd.read_csv(log_)
 
-    workmap = generate_dict(guide_log)
-    worklist = sorted(workmap.keys())
-    divided_worklist = divide_work(worklist, multiprocessing.cpu_count())
-    for workchunk in divided_worklist: 
-        pool = multiprocessing.Pool(processes=32)
+        workmap = generate_dict(guide_log)
+        worklist = sorted(workmap.keys())
+        divided_worklist = divide_work(worklist, multiprocessing.cpu_count())
+        for workchunk in divided_worklist: 
+            pool = multiprocessing.Pool(processes=32)
 
-        for i, rec in enumerate(workchunk):
-            print(f"Start {rec}")
-            files = workmap[rec]
-            filelist = [f"{rec}_{str(idx).zfill(8)}.wav" for idx in files]
-            result = pool.apply_async(process_files, args=(src_, tgt_, filelist, rec))
-        pool.close()
-        pool.join()
+            for i, rec in enumerate(workchunk):
+                print(f"Start {rec}")
+                files = workmap[rec]
+                filelist = [f"{rec}_{str(idx).zfill(8)}.wav" for idx in files]
+                result = pool.apply_async(process_files_mf, args=(src_, tgt_, filelist, rec))
+            pool.close()
+            pool.join()
+
+    # python preproc_wav2mfcc_multiprocessing_MF.py
+    # # random 
+    # print("random")
+    # src_ = phone_seg_random_rec_path
+    # tgt_ = phone_seg_random_MF_path
+    # log_ = os.path.join(bsc_path, "random-log.csv")
+
+    # guide_log = pd.read_csv(log_)
+    # guide_log = guide_log[guide_log['n_frames'] > 400]
+    # guide_log = guide_log[guide_log['duration'] <= 2.0]
+
+    # guide_log.to_csv(log_, index=False)
+    # guide_log = pd.read_csv(log_)
+
+    # workmap = generate_dict(guide_log)
+    # worklist = sorted(workmap.keys())
+    # divided_worklist = divide_work(worklist, multiprocessing.cpu_count())
+    # for workchunk in divided_worklist: 
+    #     pool = multiprocessing.Pool(processes=32)
+
+    #     for i, rec in enumerate(workchunk):
+    #         print(f"Start {rec}")
+    #         files = workmap[rec]
+    #         filelist = [f"{rec}_{str(idx).zfill(8)}.wav" for idx in files]
+    #         result = pool.apply_async(process_files_mf, args=(src_, tgt_, filelist, rec))
+    #     pool.close()
+    #     pool.join()
 
     # # anno
     # print("anno")
